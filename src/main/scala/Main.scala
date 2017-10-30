@@ -1,6 +1,7 @@
 import akka.actor.ActorSystem
 import slack.SlackUtil
 import slack.rtm.SlackRtmClient
+import twitter4j.TwitterFactory
 import scala.concurrent.ExecutionContextExecutor
 
 object Main extends App {
@@ -14,8 +15,14 @@ object Main extends App {
   client.onMessage { message =>
     val mentionedIds = SlackUtil.extractMentionedIds(message.text)
 
-    if (mentionedIds.contains(selfId)) {
-      client.sendMessage(message.channel, s"<@${message.user}>: Hey!")
+    if (selfId == message.user) {
+      // do not reaction
+    } else if (mentionedIds.contains(selfId)) {
+      try {
+        new TwitterFactory().getInstance().updateStatus(message.text.substring(13))
+      } catch {
+        case e: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
+      }
     }
   }
 }
