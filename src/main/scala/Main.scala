@@ -21,10 +21,12 @@ object Main extends App {
       // do not reaction
     } else if (mentionedIds.contains(selfId)) {
       if (message.user == operatableUserId) {
-        try {
-          new TwitterFactory().getInstance().updateStatus(message.text.substring(13))
-        } catch {
-          case e: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
+        if (message.text.substring(13).take(3) == "ttt") {
+          try {
+            new TwitterFactory().getInstance().updateStatus(message.text.substring(17))
+          } catch {
+            case e: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
+          }
         }
       }
     }
