@@ -1,11 +1,12 @@
-import domain.Operator
-import infractructure.Twitter
+package jp._5000164.scala_bot.domain
+
+import jp._5000164.scala_bot.interfaces.Twitter
 import org.mockito.Mockito.verify
 import org.scalatest.FreeSpec
 import org.scalatest.mockito.MockitoSugar
 import slack.models.Message
 
-class MainSpec extends FreeSpec with MockitoSugar {
+class OperatorSpec extends FreeSpec with MockitoSugar {
   "つぶやく内容だけを渡す" in {
     val mockTwitter = mock[Twitter]
     val operator = new Operator(mockTwitter, "AAAAAAAAA", "BBBBBBBBB")

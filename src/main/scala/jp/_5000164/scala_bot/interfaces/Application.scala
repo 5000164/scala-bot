@@ -1,10 +1,11 @@
+package jp._5000164.scala_bot.interfaces
+
 import akka.actor.ActorSystem
-import domain.Operator
-import infractructure.Twitter
+import jp._5000164.scala_bot.domain.Operator
 import slack.rtm.SlackRtmClient
 import scala.concurrent.ExecutionContextExecutor
 
-object Main extends App {
+object Application extends App {
   implicit val system: ActorSystem = ActorSystem("slack")
   implicit val ec: ExecutionContextExecutor = system.dispatcher
 
