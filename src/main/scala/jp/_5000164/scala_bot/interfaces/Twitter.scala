@@ -1,4 +1,4 @@
-package infractructure
+package jp._5000164.scala_bot.interfaces
 
 import twitter4j.TwitterFactory
 

@@ -1,6 +1,6 @@
-package domain
+package jp._5000164.scala_bot.domain
 
-import infractructure.Twitter
+import jp._5000164.scala_bot.interfaces.Twitter
 import slack.SlackUtil
 import slack.models.Message
 
