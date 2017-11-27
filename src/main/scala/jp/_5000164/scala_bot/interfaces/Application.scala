@@ -1,24 +1,24 @@
 package jp._5000164.scala_bot.interfaces
 
 import akka.actor.ActorSystem
-import jp._5000164.scala_bot.domain.Operator
 import slack.rtm.SlackRtmClient
 import scala.concurrent.ExecutionContextExecutor
 
+/**
+  * アプリケーション起動
+  */
 object Application extends App {
+  // Slack へ接続する
   implicit val system: ActorSystem = ActorSystem("slack")
   implicit val ec: ExecutionContextExecutor = system.dispatcher
-
   val token = sys.env("SLACK_TOKEN")
   val client = SlackRtmClient(token)
 
+  // 動作準備をする
   val botId = client.state.self.id
   val operatableUserId = sys.env("OPERATABLE_USER_ID")
-  val operator = new Operator(new Twitter, botId, operatableUserId)
+  val operator = new Operator(client, botId, operatableUserId, new Twitter)
 
-  client.onMessage { message =>
-    operator.operate(message) match {
-      case Some(result) => client.sendMessage(message.channel, result)
-    }
-  }
+  // メッセージを監視する
+  client.onMessage(message => operator.run(message))
 }

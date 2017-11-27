@@ -1,15 +1,16 @@
-package jp._5000164.scala_bot.domain
+package jp._5000164.scala_bot.interfaces
 
-import jp._5000164.scala_bot.interfaces.Twitter
 import org.mockito.Mockito.verify
 import org.scalatest.FreeSpec
 import org.scalatest.mockito.MockitoSugar
 import slack.models.Message
+import slack.rtm.SlackRtmClient
 
 class OperatorSpec extends FreeSpec with MockitoSugar {
   "つぶやく内容だけを渡す" in {
+    val mockClient = mock[SlackRtmClient]
     val mockTwitter = mock[Twitter]
-    val operator = new Operator(mockTwitter, "AAAAAAAAA", "BBBBBBBBB")
+    val operator = new Operator(mockClient, "AAAAAAAAA", "BBBBBBBBB", mockTwitter)
     val message = new Message(
       "ts",
       "channel",
@@ -18,7 +19,7 @@ class OperatorSpec extends FreeSpec with MockitoSugar {
       None,
       None
     )
-    operator.operate(message)
+    operator.run(message)
 
     verify(mockTwitter).tweet("text")
   }
