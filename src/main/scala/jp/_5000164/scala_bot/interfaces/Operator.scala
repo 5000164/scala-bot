@@ -1,6 +1,6 @@
 package jp._5000164.scala_bot.interfaces
 
-import jp._5000164.scala_bot.domain.{CommandDispatcher, Tweet}
+import jp._5000164.scala_bot.domain.{Command, TweetCommand}
 import slack.SlackUtil
 import slack.models.Message
 import slack.rtm.SlackRtmClient
@@ -32,8 +32,8 @@ class Operator(val client: SlackRtmClient, val botId: String, val operatableUser
     }
 
     // コマンドに応じて処理を行う
-    CommandDispatcher.decide(message.text) match {
-      case Some(Tweet) =>
+    Command.dispatch(message.text) match {
+      case Some(TweetCommand) =>
         try {
           twitter.tweet(message.text.substring(17))
         } catch {
