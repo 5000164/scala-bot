@@ -11,7 +11,7 @@ class OperatorSpec extends FreeSpec with MockitoSugar {
     val mockClient = mock[SlackRtmClient]
     val mockTwitter = mock[Twitter]
     val operator = new Operator(mockClient, "AAAAAAAAA", "BBBBBBBBB", mockTwitter)
-    val message = new Message(
+    val message = Message(
       "ts",
       "channel",
       "BBBBBBBBB",
@@ -28,7 +28,7 @@ class OperatorSpec extends FreeSpec with MockitoSugar {
     val mockClient = mock[SlackRtmClient]
     val mockTwitter = mock[Twitter]
     val operator = new Operator(mockClient, "AAAAAAAAA", "BBBBBBBBB", mockTwitter)
-    val message = new Message(
+    val message = Message(
       "ts",
       "channel",
       "BBBBBBBBB",
@@ -45,7 +45,7 @@ class OperatorSpec extends FreeSpec with MockitoSugar {
     val mockClient = mock[SlackRtmClient]
     val mockTwitter = mock[Twitter]
     val operator = new Operator(mockClient, "AAAAAAAAA", "BBBBBBBBB", mockTwitter)
-    val message = new Message(
+    val message = Message(
       "ts",
       "channel",
       "CCCCCCCCC",
