@@ -19,4 +19,14 @@ object Command {
       case _ => None
     }
   }
+
+  /**
+    * コマンドに渡す内容を取得する
+    *
+    * @param text 発言した内容
+    * @return コマンドに渡す内容
+    */
+  def content(text: String): String = {
+    text.substring(17)
+  }
 }

@@ -10,4 +10,8 @@ class CommandSpec extends FreeSpec {
   "aaa はどのコマンドでもないと判断する" in {
     assert(Command.dispatch("<@AAAAAAAAA> aaa text").isEmpty)
   }
+
+  "コマンドの後に続く文字列をコマンドに渡す内容として取得する" in {
+    assert(Command.content("<@AAAAAAAAA> ttt text") == "text")
+  }
 }
