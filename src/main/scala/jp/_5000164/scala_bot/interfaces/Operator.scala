@@ -19,18 +19,22 @@ class Operator(val client: SlackRtmClient, val botId: String, val operatableUser
     * @param message 発言内容
     */
   def run(message: Message) {
-    // bot にメンションされた時だけ反応するためにメンション先をすべて取得する
+    // bot にメンションされた時だけ動作する
     val mentionedIds = SlackUtil.extractMentionedIds(message.text)
+    if (!mentionedIds.contains(botId)) {
+      return
+    }
 
-    if (mentionedIds.contains(botId)) {
-      if (message.user == operatableUserId) {
-        if (message.text.substring(13).take(3) == "ttt") {
-          try {
-            twitter.tweet(message.text.substring(17))
-          } catch {
-            case _: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
-          }
-        }
+    // 操作が許可されたユーザーの発言でのみ動作する
+    if (message.user != operatableUserId) {
+      return
+    }
+
+    if (message.text.substring(13).take(3) == "ttt") {
+      try {
+        twitter.tweet(message.text.substring(17))
+      } catch {
+        case _: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
       }
     }
   }
