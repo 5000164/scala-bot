@@ -1,5 +1,6 @@
 package jp._5000164.scala_bot.interfaces
 
+import jp._5000164.scala_bot.domain.{CommandDispatcher, Tweet}
 import slack.SlackUtil
 import slack.models.Message
 import slack.rtm.SlackRtmClient
@@ -30,12 +31,14 @@ class Operator(val client: SlackRtmClient, val botId: String, val operatableUser
       return
     }
 
-    if (message.text.substring(13).take(3) == "ttt") {
-      try {
-        twitter.tweet(message.text.substring(17))
-      } catch {
-        case _: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
-      }
+    // コマンドに応じて処理を行う
+    CommandDispatcher.decide(message.text) match {
+      case Some(Tweet) =>
+        try {
+          twitter.tweet(message.text.substring(17))
+        } catch {
+          case _: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
+        }
     }
   }
 }
