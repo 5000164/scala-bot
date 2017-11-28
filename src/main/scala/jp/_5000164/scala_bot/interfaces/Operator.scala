@@ -34,10 +34,9 @@ class Operator(val client: SlackRtmClient, val botId: String, val operatableUser
     // コマンドに応じて処理を行う
     Command.dispatch(message.text) match {
       case Some(TweetCommand) =>
-        try {
-          twitter.tweet(Command.content(message.text))
-        } catch {
-          case _: Exception => client.sendMessage(message.channel, "ツイート送信失敗")
+        twitter.tweet(Command.content(message.text)) match {
+          case Right(_) =>
+          case Left(error_message) => client.sendMessage(message.channel, error_message)
         }
     }
   }

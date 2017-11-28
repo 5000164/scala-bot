@@ -1,6 +1,6 @@
 package jp._5000164.scala_bot.interfaces
 
-import org.mockito.Mockito.{never, verify}
+import org.mockito.Mockito.{never, verify, when}
 import org.scalatest.FreeSpec
 import org.scalatest.mockito.MockitoSugar
 import slack.models.Message
@@ -10,6 +10,8 @@ class OperatorSpec extends FreeSpec with MockitoSugar {
   "つぶやく内容だけを渡す" in {
     val mockClient = mock[SlackRtmClient]
     val mockTwitter = mock[Twitter]
+    // Right(Unit) とするとなぜかコンパイルが通らないので Right() としている
+    when(mockTwitter.tweet("text")).thenReturn(Right())
     val operator = new Operator(mockClient, "AAAAAAAAA", "BBBBBBBBB", mockTwitter)
     val message = Message(
       "ts",
@@ -56,5 +58,24 @@ class OperatorSpec extends FreeSpec with MockitoSugar {
     operator.run(message)
 
     verify(mockTwitter, never).tweet("text")
+  }
+
+  "ツイート処理が例外を投げたら Slack にメッセージを投げる" in {
+    val mockClient = mock[SlackRtmClient]
+    val mockTwitter = mock[Twitter]
+    when(mockTwitter.tweet("text")).thenReturn(Left("message"))
+    val operator = new Operator(mockClient, "AAAAAAAAA", "BBBBBBBBB", mockTwitter)
+    val message = Message(
+      "ts",
+      "channel",
+      "BBBBBBBBB",
+      "<@AAAAAAAAA> ttt text",
+      None,
+      None
+    )
+    operator.run(message)
+
+    // なぜか引数の検証ができない
+    verify(mockClient).sendMessage("", "")
   }
 }
