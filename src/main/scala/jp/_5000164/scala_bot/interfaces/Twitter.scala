@@ -10,14 +10,14 @@ class Twitter {
     * ツイートする
     *
     * @param text ツイートする内容
-    * @return ツイートに成功したかどうか
+    * @return ツイートに失敗した場合はエラーメッセージを返す
     */
-  def tweet(text: String): Boolean = {
+  def tweet(text: String): Either[String, Unit] = {
     try {
       new TwitterFactory().getInstance().updateStatus(text)
-      true
+      Right(Unit)
     } catch {
-      case e: Exception => false
+      case e: Exception => Left(e.toString)
     }
   }
 }
